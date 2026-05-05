@@ -13,7 +13,7 @@ int main()
     // Input burst times
     for (i = 0; i < n; i++){
         p[i] = i;
-        cout << "Enter Burst Time for Process" << i << ":";
+        cout << "Enter Burst Time for Process " << i+1 << ":";
         cin >> bt[i];
     }
 
@@ -46,7 +46,7 @@ int main()
     // Output
     cout << "\nPROCESS\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n";
     for (i = 0; i < n; i++){
-        cout << "P" << p[i] << "\t\t"
+        cout << "P" << p[i]+1 << "\t\t"
              << bt[i] << "\t\t"
              << wt[i] << "\t\t"
              << tat[i] << endl;
