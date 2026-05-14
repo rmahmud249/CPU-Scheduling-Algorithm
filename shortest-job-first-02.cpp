@@ -10,28 +10,23 @@ int main()
     cout << "Enter the number of processes: ";
     cin >> n;
 
-    // Input burst times
     for (i = 0; i < n; i++){
         p[i] = i;
         cout << "Enter Burst Time for Process " << i+1 << ":";
         cin >> bt[i];
     }
 
-    // Sorting based on Burst Time (SJF)
     for (i = 0; i < n; i++){
         for (k = i + 1; k < n; k++){
             if (bt[i] > bt[k])
             {
-                // swap burst time
+           
                 swap(bt[i], bt[k]);
-
-                // swap process id
                 swap(p[i], p[k]);
             }
         }
     }
 
-    // Calculate waiting time and turnaround time
     wt[0] = 0;
     tat[0] = bt[0];
 
@@ -42,8 +37,8 @@ int main()
         wtavg += wt[i];
         tatavg += tat[i];
     }
-    tatavg += tat[0]; // include first process
-    // Output
+    tatavg += tat[0]; 
+ 
     cout << "\nPROCESS\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n";
     for (i = 0; i < n; i++){
         cout << "P" << p[i]+1 << "\t\t"

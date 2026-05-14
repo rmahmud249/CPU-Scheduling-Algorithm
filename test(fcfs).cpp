@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
@@ -9,47 +8,39 @@ int main() {
     cout << "Enter number of processes: ";
     cin >> n;
 
-    vector<int> p(n), bt(n), wt(n), tat(n);
-
+    vector<int> bt(n), wt(n), tat(n);
 
     for (int i = 0; i < n; i++) {
-        p[i] = i + 1;
         cout << "Enter Burst Time for Process P" << i + 1 << ": ";
         cin >> bt[i];
-    }
-
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (bt[i] > bt[j]) {
-                swap(bt[i], bt[j]);
-                swap(p[i], p[j]);
-            }
-        }
     }
 
     wt[0] = 0;
     tat[0] = bt[0];
 
-    float wtavg = wt[0], tatavg = tat[0];
+    float wtSum = wt[0];
+    float tatSum = tat[0];
+
 
     for (int i = 1; i < n; i++) {
         wt[i] = wt[i - 1] + bt[i - 1];
-        tat[i] = wt[i] + bt[i];
+        tat[i] = wt[i] + bt[i]; 
 
-        wtavg += wt[i];
-        tatavg += tat[i];
+        wtSum += wt[i];
+        tatSum += tat[i];
     }
+
     cout << "\nPROCESS\tBURST\tWAIT\tTURNAROUND\n";
 
     for (int i = 0; i < n; i++) {
-        cout << "P" << p[i] << "\t\t"
+        cout << "P" << i + 1 << "\t\t"
              << bt[i] << "\t"
              << wt[i] << "\t"
              << tat[i] << endl;
     }
 
-    cout << "\nAverage Waiting Time: " << wtavg / n;
-    cout << "\nAverage Turnaround Time: " << tatavg / n << endl;
+    cout << "\nAverage Waiting Time: " << wtSum / n;
+    cout << "\nAverage Turnaround Time: " << tatSum / n << endl;
 
     return 0;
 }

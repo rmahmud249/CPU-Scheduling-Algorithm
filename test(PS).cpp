@@ -1,89 +1,59 @@
 #include <iostream>
-#include <iomanip>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int main()
-{
-    int p[20], bt[20], pri[20], wt[20], tat[20];
-    int i, k, n;
-    float wtavg = 0, tatavg = 0;
+int main() {
+    int n;
 
-    cout << "Enter the number of processes: ";
+    cout << "Enter number of processes: ";
     cin >> n;
 
-    // Input process details
-    for (i = 0; i < n; i++)
-    {
+    vector<int> p(n), bt(n), pri(n);
+    vector<int> wt(n), tat(n);
+
+    for (int i = 0; i < n; i++) {
         p[i] = i + 1;
-        cout << "Enter the Burst Time & Priority of Process " << i + 1 << ": ";
+        cout << "Enter Burst Time and Priority for Process P" << i + 1 << ": ";
         cin >> bt[i] >> pri[i];
     }
 
-    // Sorting based on priority (lower number = higher priority)
-    for (i = 0; i < n; i++)
-    {
-        for (k = i + 1; k < n; k++)
-        {
-            if (pri[i] > pri[k])
-            {
-                swap(p[i], p[k]);
-                swap(bt[i], bt[k]);
-                swap(pri[i], pri[k]);
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (pri[i] > pri[j]) {
+                swap(p[i], p[j]);
+                swap(bt[i], bt[j]);
+                swap(pri[i], pri[j]);
             }
         }
     }
 
-    // Waiting time and turnaround time calculation
     wt[0] = 0;
     tat[0] = bt[0];
 
-    wtavg = 0;
-    tatavg = tat[0];
+    int wtSum = wt[0];
+    int tatSum = tat[0];
 
-    for (i = 1; i < n; i++)
-    {
+    for (int i = 1; i < n; i++) {
         wt[i] = wt[i - 1] + bt[i - 1];
-        tat[i] = wt[i] + bt[i];
+        tat[i] = wt[i] + bt[i];   
 
-        wtavg += wt[i];
-        tatavg += tat[i];
+        wtSum += wt[i];
+        tatSum += tat[i];
     }
 
-    // Output table
-    cout << "\nPROCESS\tPRIORITY\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n";
-    for (i = 0; i < n; i++)
-    {
-        cout << "P" << p[i] << "\t"
+    cout << "\nPROCESS\tPRIORITY\tBURST\tWAIT\tTURNAROUND\n";
+
+    for (int i = 0; i < n; i++) {
+        cout << "P" << p[i] << "\t\t"
              << pri[i] << "\t\t"
-             << bt[i] << "\t\t"
-             << wt[i] << "\t\t"
+             << bt[i] << "\t"
+             << wt[i] << "\t"
              << tat[i] << endl;
     }
 
-    // Gantt Chart
-    cout << "\nGANTT CHART\n";
-    cout << "-------------------------------------------------\n";
-
-    int time = 0;
-
-    for (i = 0; i < n; i++)
-    {
-        cout << "|  P" << p[i] << "  ";
-    }
-    cout << "|\n";
-
-    cout << "0";
-
-    for (i = 0; i < n; i++)
-    {
-        time += bt[i];
-        cout << setw(6) << time;
-    }
-
-    cout << "\n-------------------------------------------------\n";
-
-    cout << "\nAverage Waiting Time is: " << wtavg / n << endl;
-    cout << "Average Turnaround Time is: " << tatavg / n << endl;
+    cout << "\nAverage Waiting Time: " << (float)wtSum / n;
+    cout << "\nAverage Turnaround Time: " << (float)tatSum / n << endl;
 
     return 0;
 }

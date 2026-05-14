@@ -71,8 +71,9 @@ int main()
              << tat[i] << endl;
     }
 
-    cout << "\nAverage Turnaround Time: " << att / n;
     cout << "\nAverage Waiting Time: " << awt / n;
+    cout << "\nAverage Turnaround Time: " << att / n;
+
 
     return 0;
 }

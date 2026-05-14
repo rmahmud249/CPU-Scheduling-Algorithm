@@ -1,106 +1,70 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int main()
-{
-    int i, j, n, t;
-    int bu[10], wa[10], tat[10], ct[10], p[10], max_bt;
-    float awt = 0, att = 0, time = 0;
+int main() {
+    int n, tq;
 
-    // Gantt chart arrays
-    int gantt_process[100];
-    float gantt_time[100];
-    int g = 0;
-
-    cout << "Enter the number of processes: ";
+    cout << "Enter number of processes: ";
     cin >> n;
 
-    // Input burst times
-    for (i = 0; i < n; i++)
-    {
-        cout << "Enter Burst Time for process " << i + 1 << ": ";
-        cin >> bu[i];
+    vector<int> bt(n), rem(n), wt(n), tat(n), p(n);
 
-        ct[i] = bu[i];   // store original burst time
+    for (int i = 0; i < n; i++) {
+        cout << "Enter Burst Time for Process P" << i + 1 << ": ";
+        cin >> bt[i];
+        rem[i] = bt[i];   
         p[i] = i + 1;
     }
 
-    cout << "Enter the size of time slice (Time Quantum): ";
-    cin >> t;
+    cout << "Enter Time Quantum: ";
+    cin >> tq;
 
-    // Find maximum burst time
-    max_bt = bu[0];
-    for (i = 1; i < n; i++)
-    {
-        if (max_bt < bu[i])
-            max_bt = bu[i];
-    }
+    int time = 0;
+    bool done;
 
-    // Round Robin Scheduling
-    for (j = 0; j < (max_bt / t) + 1; j++)
-    {
-        for (i = 0; i < n; i++)
-        {
-            if (bu[i] != 0)
-            {
-                gantt_process[g] = i + 1;
-                gantt_time[g] = time;
-                g++;
+    while (true) {
+        done = true;
 
-                if (bu[i] <= t)
-                {
-                    time += bu[i];
+        for (int i = 0; i < n; i++) {
+            if (rem[i] > 0) {
+                done = false;
+
+                if (rem[i] > tq) {
+                    time += tq;
+                    rem[i] -= tq;
+                } else {
+                    time += rem[i];
                     tat[i] = time;
-                    bu[i] = 0;
-                }
-                else
-                {
-                    bu[i] -= t;
-                    time += t;
+                    rem[i] = 0;
                 }
             }
         }
+
+        if (done) break;
     }
 
-    gantt_time[g] = time; // last time
 
-    // Calculate waiting time and averages
-    for (i = 0; i < n; i++)
-    {
-        wa[i] = tat[i] - ct[i];
-        att += tat[i];
-        awt += wa[i];
+    float wtSum = 0, tatSum = 0;
+
+    for (int i = 0; i < n; i++) {
+        wt[i] = tat[i] - bt[i];
+
+        wtSum += wt[i];
+        tatSum += tat[i];
     }
 
-    // Output table
-    cout << "\nPROCESS\tBURST TIME\tWAITING TIME\tTURNAROUND TIME\n";
-    for (i = 0; i < n; i++)
-    {
+    cout << "\nPROCESS\tBURST\tWAIT\tTURNAROUND\n";
+
+    for (int i = 0; i < n; i++) {
         cout << "P" << p[i] << "\t\t"
-             << ct[i] << "\t\t"
-             << wa[i] << "\t\t"
+             << bt[i] << "\t"
+             << wt[i] << "\t"
              << tat[i] << endl;
     }
 
-    // Gantt Chart Output
-    cout << "\n\nGANTT CHART\n";
-    cout << "-------------------------------------------------\n";
-
-    for (i = 0; i < g; i++)
-    {
-        cout << "| P" << gantt_process[i] << " ";
-    }
-    cout << "|\n";
-
-    for (i = 0; i <= g; i++)
-    {
-        cout << gantt_time[i] << "    ";
-    }
-
-    cout << "\n-------------------------------------------------\n";
-
-    cout << "\nAverage Turnaround Time: " << att / n;
-    cout << "\nAverage Waiting Time: " << awt / n;
+    cout << "\nAverage Waiting Time: " << wtSum / n;
+    cout << "\nAverage Turnaround Time: " << tatSum / n << endl;
 
     return 0;
 }
