@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <pthread.h>
+
+int n;
+int isPrime = 1;
+void* check_prime(void* arg) {
+
+    if (n <= 1) {
+        isPrime = 0;
+        return NULL;
+    }
+
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            isPrime = 0;
+            break;
+        }
+    }
+
+    return NULL;
+}
+
+int main() {
+    pthread_t t;
+
+    printf("Enter a number: ");
+    scanf("%d", &n);
+
+    pthread_create(&t, NULL, check_prime, NULL);
+    pthread_join(t, NULL);
+
+    if (isPrime)
+        printf("%d is Prime Number\n", n);
+    else
+        printf("%d is NOT Prime Number\n", n);
+
+    return 0;
+}

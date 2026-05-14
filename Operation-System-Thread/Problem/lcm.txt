@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <pthread.h>
+
+int a = 12, b = 15;
+int lcm;
+
+int gcd(int x, int y) {
+    while (y != 0) {
+        int temp = y;
+        y = x % y;
+        x = temp;
+    }
+    return x;
+}
+
+void* find_lcm(void* arg) {
+    int g = gcd(a, b);
+    lcm = (a * b) / g;
+    return NULL;
+}
+
+int main() {
+    pthread_t t;
+
+    pthread_create(&t, NULL, find_lcm, NULL);
+    pthread_join(t, NULL);
+
+    printf("LCM = %d\n", lcm);
+
+    return 0;
+}

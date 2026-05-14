@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <pthread.h>
+
+int n = 5;
+long long fact = 1;
+
+void* factorial(void* arg) {
+    for (int i = 1; i <= n; i++) {
+        fact *= i;
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t t;
+
+    pthread_create(&t, NULL, factorial, NULL);
+    pthread_join(t, NULL);
+
+    printf("Factorial = %lld\n", fact);
+
+    return 0;
+}
